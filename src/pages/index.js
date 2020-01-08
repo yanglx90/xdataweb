@@ -2,9 +2,7 @@ import styles from './index.css';
 import React, {useState} from "react";
 
 export default function () {
-  const setCount=(count)=>{
-    setState(count)
-  }
+  const [count,setCount]=useState(0);
   return (
     <div className={styles.normal}>
       <div className={styles.welcome}/>
