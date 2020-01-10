@@ -1,32 +1,51 @@
-import React, { useCallback, useEffect } from 'react';
-import { connect } from 'dva';
+import React, {Component} from 'react';
+import {Button, Form, Input} from "antd";
+import {connect} from 'dva'
+
+@connect(({homeModel}) => ({homeModel}))
+@Form.create()
+class Home extends Component {
+  loadData = () => {
+    this.props.dispatch({
+      type: 'homeModel/test'
+    })
+  };
+
+  componentDidMount() {
+    this.loadData()
+  }
 
 
-function Home(props) {
-  const ussTest=useCallback(()=> {
-    props.dispatch(
-      {
-        type: 'homeModel/add',
-        payload:{count:122}
-      }
+  render() {
+    const {form, homeModel} = this.props;
+    return (
+      <div>
+        <p>{homeModel.countnum}</p>
+        <Button>{homeModel.countnum}</Button>
+        <Form layout={"vertical"}>
+          <Form.Item wrapperCol={{span: 13}} labelCol={{span: 8}} label={'测试'}>
+            {
+              form.getFieldDecorator('name',
+                {
+                  initialValue: homeModel.countnum
+                })(<Input/>)
+            }
+          </Form.Item>
+          <Form.Item label={'测试2'}>
+            {
+              form.getFieldDecorator('nam1e',
+                {
+                  initialValue: homeModel.countnum
+                })(<Input/>)
+            }
+          </Form.Item>
+          <Form.Item>
+            <Button onClick={this.loadData}>提交</Button>
+          </Form.Item>
+        </Form>
+      </div>
     );
-  })
-  useEffect(
-    ()=> {
-      ussTest();
-      return ()=>console.log('结束')
-    },[props.homeModel.loading, ussTest]
-  )
-
-
-  return (
-    <div>
-      {/*<button onClick={() => props.home.add(count + 1)}>Click me</button>*/}
-      <p>{props.homeModel.count}</p>
-      <button onClick={ ussTest}>Click me</button>
-    </div>
-  );
+  }
 }
 
-export default connect(({homeModel}) => ({homeModel}))(Home);
-
+export default Home;
